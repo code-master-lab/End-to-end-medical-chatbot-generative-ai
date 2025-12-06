@@ -1,0 +1,21 @@
+sentence-transformers==2.2.2
+langchain
+flask
+pypdf
+python-dotenv
+
+# Vector Database
+pinecone[grpc]
+langchain-pinecone
+langchain_community
+
+# Free LLM (Groq + Llama3)
+groq
+langchain-groq
+
+# Remove if not using OpenAI anymore:
+# langchain_openai
+
+# Extra utilities
+langchain_experimental
+-e .
