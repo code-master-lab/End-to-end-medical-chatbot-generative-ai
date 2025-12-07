@@ -1,7 +1,6 @@
 flask
 python-dotenv
 
-# LangChain ecosystem
 langchain
 langchain-community
 langchain-core
@@ -9,16 +8,10 @@ langchain-text-splitters
 langchain-pinecone
 langchain-groq
 
-# Vector DB (Pinecone V3)
 pinecone
 
-# Embeddings (CPU ONLY)
 sentence-transformers==2.2.2
-torch==2.0.1+cpu
--f https://download.pytorch.org/whl/cpu
+torch==2.0.1
 
-# PDF loader
 pypdf
-
-# Web server for hosting on Render
 gunicorn
