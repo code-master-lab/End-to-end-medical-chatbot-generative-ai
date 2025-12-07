@@ -11,7 +11,7 @@
 
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 
 # -------------------------------------------------------------
 # 1. Load PDF documents from a directory
@@ -49,8 +49,12 @@ def text_split(extracted_data):
 #
 # This function loads the model ONLY when called inside rag_pipeline().
 # -------------------------------------------------------------
+
+
 def get_embeddings():
-    return HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2"
+    return HuggingFaceBgeEmbeddings(
+        model_name="BAAI/bge-small-en-v1.5",
+        encode_kwargs={"normalize_embeddings": True}
     )
+
 

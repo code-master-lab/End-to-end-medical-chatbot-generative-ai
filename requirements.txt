@@ -10,8 +10,11 @@ langchain-groq
 
 pinecone
 
-sentence-transformers==2.2.2
-torch==2.0.1
+# Lightweight embedding model (NO torch)
+huggingface-hub
+onnxruntime
+sentence-transformers  # Keep ONLY if needed, but not required
 
 pypdf
 gunicorn
+
