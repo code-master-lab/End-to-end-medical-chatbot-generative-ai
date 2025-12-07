@@ -1,21 +1,23 @@
-sentence-transformers==2.2.2
-langchain
 flask
-pypdf
 python-dotenv
 
-# Vector Database
-pinecone[grpc]
+# LangChain ecosystem
+langchain
+langchain-community
+langchain-core
+langchain-text-splitters
 langchain-pinecone
-langchain_community
-
-# Free LLM (Groq + Llama3)
-groq
 langchain-groq
 
-# Remove if not using OpenAI anymore:
-# langchain_openai
+# Vector DB (Pinecone V3)
+pinecone
 
-# Extra utilities
-langchain_experimental
--e .
+# Embeddings
+sentence-transformers
+torch
+
+# PDF loaders
+pypdf
+
+# Web server for hosting on Render
+gunicorn
