@@ -12,11 +12,12 @@ langchain-groq
 # Vector DB (Pinecone V3)
 pinecone
 
-# Embeddings
-sentence-transformers
-torch
+# Embeddings (CPU ONLY)
+sentence-transformers==2.2.2
+torch==2.0.1+cpu
+-f https://download.pytorch.org/whl/cpu
 
-# PDF loaders
+# PDF loader
 pypdf
 
 # Web server for hosting on Render
