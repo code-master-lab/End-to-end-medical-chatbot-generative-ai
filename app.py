@@ -13,14 +13,19 @@ from src.helper import get_embeddings
 from pinecone import Pinecone
 
 load_dotenv()
+
+# API KEYS
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
+# Pinecone Init
 pc = Pinecone(api_key=PINECONE_API_KEY)
 index_name = "medicalbot"
 
+# Embeddings (Custom HF API)
 embeddings = get_embeddings()
 
+# Load vectorstore
 docsearch = PineconeVectorStore.from_existing_index(
     index_name=index_name,
     embedding=embeddings
@@ -28,12 +33,14 @@ docsearch = PineconeVectorStore.from_existing_index(
 
 retriever = docsearch.as_retriever(search_kwargs={"k": 3})
 
+# LLM
 llm = ChatGroq(
     api_key=GROQ_API_KEY,
     model="llama-3.1-8b-instant",
     temperature=0.4
 )
 
+# Prompt
 prompt = ChatPromptTemplate.from_messages([
     ("system", system_prompt),
     ("human", "{input}")
@@ -42,21 +49,18 @@ prompt = ChatPromptTemplate.from_messages([
 parser = StrOutputParser()
 chain = prompt | llm | parser
 
+# RAG Pipeline
 def rag_pipeline(query):
-    # Call retriever using the new LangChain API
     docs = retriever.invoke(query)
-
-    # Join retrieved chunk text
     context = "\n\n".join([doc.page_content for doc in docs])
 
-    # Pass into the LLM chain
     return chain.invoke({
         "context": context,
         "input": query
     })
 
 
-
+# Flask Application
 app = Flask(__name__)
 
 @app.route("/")

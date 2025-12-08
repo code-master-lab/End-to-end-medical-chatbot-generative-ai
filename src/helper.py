@@ -1,5 +1,5 @@
 # -------------------------------------------------------------
-# CUSTOM EMBEDDING FOR RENDER (NEVER BREAKS)
+# RAG HELPER FUNCTIONS (Render-Safe, No Torch)
 # -------------------------------------------------------------
 
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
@@ -9,9 +9,9 @@ import requests
 
 
 # -------------------- 1. PDF LOADER --------------------------
-def load_pdf_file(data_folder: str):
+def load_pdf_file(folder_path: str):
     loader = DirectoryLoader(
-        data_folder,
+        folder_path,
         glob="*.pdf",
         loader_cls=PyPDFLoader
     )
@@ -19,27 +19,29 @@ def load_pdf_file(data_folder: str):
 
 
 # -------------------- 2. TEXT SPLITTER ------------------------
-def text_split(extracted_data):
+def text_split(documents):
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=500,
         chunk_overlap=20
     )
-    return splitter.split_documents(extracted_data)
+    return splitter.split_documents(documents)
 
 
 # -------------------- 3. CUSTOM HF EMBEDDING -----------------
-# This does NOT use LangChain embedding classes.
-# It directly calls HuggingFace Inference API.
-# Works perfectly on Render + NO torch needed.
+# This uses HuggingFace Inference API directly.
+# It NEVER breaks on Render.
 # -------------------------------------------------------------
 
 class HFCustomEmbedder:
     def __init__(self):
-        self.api_url = "https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2"
+        self.api_url = (
+            "https://api-inference.huggingface.co/models/"
+            "sentence-transformers/all-MiniLM-L6-v2"
+        )
         token = os.getenv("HF_TOKEN")
         self.headers = {"Authorization": f"Bearer {token}"}
 
-    def embed_query(self, text):
+    def embed_query(self, text: str):
         response = requests.post(
             self.api_url,
             headers=self.headers,
@@ -48,12 +50,11 @@ class HFCustomEmbedder:
 
         data = response.json()
 
-        # If model is cold and returns "error", return a fallback embedding
+        # HF cold start fallback
         if isinstance(data, dict) and "error" in data:
             return [0.0] * 384
 
-        # HF returns a list inside a list → [[vector]]
-        return data[0]
+        return data[0]  # HF returns [[vector]]
 
     def embed_documents(self, texts):
         return [self.embed_query(t) for t in texts]
