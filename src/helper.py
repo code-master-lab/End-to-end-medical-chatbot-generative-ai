@@ -52,19 +52,14 @@ def text_split(extracted_data):
 # This function loads the model ONLY when called inside rag_pipeline().
 # -------------------------------------------------------------
 
-
-
-
-
-
 import os
-from langchain_huggingface import HuggingFaceEndpointEmbeddings
+from langchain_community.embeddings import HuggingFaceHubEmbeddings
 
 def get_embeddings():
     hf_token = os.getenv("HF_TOKEN")
-
-    return HuggingFaceEndpointEmbeddings(
-        model="sentence-transformers/all-MiniLM-L6-v2",
-        token=hf_token
+    
+    return HuggingFaceHubEmbeddings(
+        repo_id="sentence-transformers/all-MiniLM-L6-v2",
+        huggingfacehub_api_token=hf_token
     )
 
