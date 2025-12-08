@@ -12,7 +12,7 @@
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import os
-from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
+
 
 
 # -------------------------------------------------------------
@@ -53,15 +53,18 @@ def text_split(extracted_data):
 # -------------------------------------------------------------
 
 
+
+
 import os
-from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 
 def get_embeddings():
     hf_token = os.getenv("HF_TOKEN")
-    return HuggingFaceInferenceAPIEmbeddings(
-        api_key=hf_token,
-        model_name="sentence-transformers/all-MiniLM-L6-v2"
-    )
 
+    return HuggingFaceEndpointEmbeddings(
+        model="sentence-transformers/all-MiniLM-L6-v2",
+        task="feature-extraction",
+        api_key=hf_token
+    )
 
 
