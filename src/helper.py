@@ -11,7 +11,9 @@
 
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceBgeEmbeddings
+import os
+from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
+
 
 # -------------------------------------------------------------
 # 1. Load PDF documents from a directory
@@ -51,10 +53,15 @@ def text_split(extracted_data):
 # -------------------------------------------------------------
 
 
+import os
+from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
+
 def get_embeddings():
-    return HuggingFaceBgeEmbeddings(
-        model_name="BAAI/bge-small-en-v1.5",
-        encode_kwargs={"normalize_embeddings": True}
+    hf_token = os.getenv("HF_TOKEN")
+    return HuggingFaceInferenceAPIEmbeddings(
+        api_key=hf_token,
+        model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
+
 
 

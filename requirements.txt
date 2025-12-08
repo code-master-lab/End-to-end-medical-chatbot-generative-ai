@@ -9,10 +9,8 @@ langchain-pinecone
 langchain-groq
 
 pinecone
-
 huggingface-hub
 onnxruntime
 
 pypdf
 gunicorn
-
