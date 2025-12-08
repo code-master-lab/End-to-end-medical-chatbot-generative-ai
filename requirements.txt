@@ -7,8 +7,10 @@ langchain-core
 langchain-text-splitters
 langchain-pinecone
 langchain-groq
+langchain-huggingface   # REQUIRED for HuggingFaceEndpointEmbeddings
 
 pinecone
+
 huggingface-hub
 onnxruntime
 
