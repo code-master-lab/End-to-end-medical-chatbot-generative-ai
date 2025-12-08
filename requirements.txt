@@ -12,7 +12,9 @@ pinecone
 
 huggingface-hub
 onnxruntime
+requests
 
 pypdf
 gunicorn
+
 
