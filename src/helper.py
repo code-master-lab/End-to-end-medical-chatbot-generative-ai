@@ -55,6 +55,8 @@ def text_split(extracted_data):
 
 
 
+
+
 import os
 from langchain_huggingface import HuggingFaceEndpointEmbeddings
 
@@ -63,8 +65,6 @@ def get_embeddings():
 
     return HuggingFaceEndpointEmbeddings(
         model="sentence-transformers/all-MiniLM-L6-v2",
-        task="feature-extraction",
-        api_key=hf_token
+        token=hf_token
     )
-
 
