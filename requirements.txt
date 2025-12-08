@@ -10,10 +10,8 @@ langchain-groq
 
 pinecone
 
-# Lightweight embedding model (NO torch)
 huggingface-hub
 onnxruntime
-sentence-transformers  # Keep ONLY if needed, but not required
 
 pypdf
 gunicorn
