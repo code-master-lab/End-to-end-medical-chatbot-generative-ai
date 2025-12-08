@@ -12,20 +12,19 @@ from src.helper import get_embeddings
 
 from pinecone import Pinecone
 
+# Load env variables
 load_dotenv()
-
-# API KEYS
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-# Pinecone Init
+# Initialize Pinecone
 pc = Pinecone(api_key=PINECONE_API_KEY)
 index_name = "medicalbot"
 
-# Embeddings (Custom HF API)
+# Load SAME embeddings used during Jupyter indexing
 embeddings = get_embeddings()
 
-# Load vectorstore
+# Connect to existing Pinecone index
 docsearch = PineconeVectorStore.from_existing_index(
     index_name=index_name,
     embedding=embeddings
@@ -33,14 +32,14 @@ docsearch = PineconeVectorStore.from_existing_index(
 
 retriever = docsearch.as_retriever(search_kwargs={"k": 3})
 
-# LLM
+# Groq LLM
 llm = ChatGroq(
     api_key=GROQ_API_KEY,
     model="llama-3.1-8b-instant",
     temperature=0.4
 )
 
-# Prompt
+# RAG PROMPT
 prompt = ChatPromptTemplate.from_messages([
     ("system", system_prompt),
     ("human", "{input}")
@@ -59,8 +58,7 @@ def rag_pipeline(query):
         "input": query
     })
 
-
-# Flask Application
+# Flask App
 app = Flask(__name__)
 
 @app.route("/")
@@ -73,8 +71,6 @@ def get_bot_response():
     answer = rag_pipeline(user_input)
     return answer
 
-
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
+    port = int(os.getenv("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
-

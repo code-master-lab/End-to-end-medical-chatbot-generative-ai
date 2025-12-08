@@ -4,15 +4,14 @@ python-dotenv
 langchain
 langchain-community
 langchain-core
-langchain-text-splitters
 langchain-pinecone
+langchain-text-splitters
 langchain-groq
 
-pinecone
+pinecone-client
 
-huggingface-hub
-onnxruntime
-requests
+sentence-transformers
+torch
 
 pypdf
 gunicorn
