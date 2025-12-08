@@ -43,14 +43,18 @@ parser = StrOutputParser()
 chain = prompt | llm | parser
 
 def rag_pipeline(query):
-    embeddings = get_embeddings()
-    docs = retriever.get_relevant_documents(query)
-    context = "\n\n".join([d.page_content for d in docs])
-    
+    # Call retriever using the new LangChain API
+    docs = retriever.invoke(query)
+
+    # Join retrieved chunk text
+    context = "\n\n".join([doc.page_content for doc in docs])
+
+    # Pass into the LLM chain
     return chain.invoke({
         "context": context,
         "input": query
     })
+
 
 
 app = Flask(__name__)
