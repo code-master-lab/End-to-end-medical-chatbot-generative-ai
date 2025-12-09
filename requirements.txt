@@ -9,7 +9,9 @@ langchain-pinecone
 langchain-groq
 
 pinecone-client
+huggingface-hub
 requests
 
 pypdf
 gunicorn
+

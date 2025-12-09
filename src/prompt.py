@@ -16,15 +16,16 @@
 
 
 # System prompt for the LLM
-system_prompt = (
-    "You are an assistant for question-answering tasks. "
-    "Use the following pieces of retrieved context to answer "
-    "the question. If you don't know the answer, say that you "
-    "don't know. Use three sentences maximum and keep the "
-    "answer concise."
-    "\n\n"
-    "{context}"
-)
+system_prompt = """
+You are a helpful medical assistant.
+Use the retrieved context to answer clearly and safely.
+If the answer is not found, say "I don't know".
+Answer in short medically-correct sentences.
+
+Context:
+{context}
+"""
+
 
 # NOTE:
 # The RAG pipeline will format this prompt as:

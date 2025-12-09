@@ -1,8 +1,10 @@
 # -------------------------------------------------------------
-# CUSTOM EMBEDDING FOR RENDER (NEVER BREAKS)
+# RAG HELPER FUNCTIONS (Render-Optimized)
 # -------------------------------------------------------------
-# Uses HuggingFace API (NO torch, NO sentence-transformers).
-# Works perfectly on Render Free Tier (512 MB RAM).
+# - Loads PDFs
+# - Splits them into chunks
+# - Provides custom embedding using HuggingFace API
+# - Works on Render Free Tier (No GPU / No Torch)
 # -------------------------------------------------------------
 
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
@@ -10,7 +12,10 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 import os
 import requests
 
-# -------------------- 1. PDF LOADER --------------------------
+
+# -------------------------------------------------------------
+# 1. Load PDF files from a directory
+# -------------------------------------------------------------
 def load_pdf_file(data_folder: str):
     loader = DirectoryLoader(
         data_folder,
@@ -20,7 +25,9 @@ def load_pdf_file(data_folder: str):
     return loader.load()
 
 
-# -------------------- 2. TEXT SPLITTER ------------------------
+# -------------------------------------------------------------
+# 2. Split extracted text into chunks
+# -------------------------------------------------------------
 def text_split(extracted_data):
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=500,
@@ -29,13 +36,17 @@ def text_split(extracted_data):
     return splitter.split_documents(extracted_data)
 
 
-# -------------------- 3. HF REMOTE EMBEDDINGS ----------------
-# ZERO memory usage — perfect for Render.
 # -------------------------------------------------------------
-
+# 3. Custom HuggingFace Embedding Class (API-based)
+# -------------------------------------------------------------
+# This avoids all torch / heavy model issues. Works via HF API.
+# -------------------------------------------------------------
 class HFCustomEmbedder:
     def __init__(self):
-        self.api_url = "https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2"
+        self.api_url = (
+            "https://api-inference.huggingface.co/models/"
+            "sentence-transformers/all-MiniLM-L6-v2"
+        )
         token = os.getenv("HF_TOKEN")
         self.headers = {"Authorization": f"Bearer {token}"}
 
@@ -45,10 +56,9 @@ class HFCustomEmbedder:
             headers=self.headers,
             json={"inputs": text}
         )
-
         data = response.json()
 
-        # Handle HF cold start
+        # If cold start or error → return fallback vector
         if isinstance(data, dict) and "error" in data:
             return [0.0] * 384
 
@@ -60,3 +70,4 @@ class HFCustomEmbedder:
 
 def get_embeddings():
     return HFCustomEmbedder()
+
