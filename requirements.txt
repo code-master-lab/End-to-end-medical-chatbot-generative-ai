@@ -1,17 +1,78 @@
+# ------------------------------------------------------------
+# WEB FRAMEWORK & ENVIRONMENT MANAGEMENT
+# ------------------------------------------------------------
+
 flask
+# Flask is the backend web framework.
+# It handles HTTP requests, routes, and serves the chat UI.
+
 python-dotenv
+# Loads environment variables from a .env file.
+# Used to securely manage API keys (Pinecone, Groq, HF).
+
+
+# ------------------------------------------------------------
+# LANGCHAIN CORE (RAG FRAMEWORK)
+# ------------------------------------------------------------
 
 langchain
+# Core LangChain abstractions.
+# Provides chain logic and RAG workflow structure.
+
 langchain-community
+# Community-maintained integrations.
+# Includes document loaders (PyPDFLoader) and embeddings.
+
 langchain-core
+# Low-level primitives:
+# prompts, output parsers, runnables, chain operators (|).
+
 langchain-text-splitters
+# Required for splitting large documents into chunks.
+# Critical for embeddings and vector search accuracy.
+
 langchain-pinecone
+# LangChain wrapper for Pinecone vector database.
+# Enables storing and retrieving embeddings easily.
+
 langchain-groq
+# LangChain integration for Groq LLMs.
+# Used to connect to LLaMA models via Groq API.
+
+
+# ------------------------------------------------------------
+# VECTOR DATABASE & EMBEDDINGS
+# ------------------------------------------------------------
 
 pinecone-client
+# Official Pinecone SDK.
+# Used for index creation, listing, and infrastructure control.
+
 huggingface-hub
+# Downloads and manages Hugging Face models.
+# Required for sentence-transformer embedding models.
+
 requests
+# HTTP client used internally by SDKs and APIs.
+# Dependency for many cloud-based integrations.
+
+
+# ------------------------------------------------------------
+# DOCUMENT PROCESSING
+# ------------------------------------------------------------
 
 pypdf
+# Reads and extracts text from PDF files.
+# Required for loading medical documents.
+
+
+# ------------------------------------------------------------
+# PRODUCTION SERVER
+# ------------------------------------------------------------
+
 gunicorn
+# Production-grade WSGI server.
+# Used to run Flask app in deployment (Render, Docker, Cloud).
+# Replaces Flask’s built-in development server.
+
 

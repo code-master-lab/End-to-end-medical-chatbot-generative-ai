@@ -1,40 +1,47 @@
 # -------------------------------------------------------------
 # prompt.py
 # -------------------------------------------------------------
-# This file contains the system prompt used by the LLM (Groq)
-# in our RAG pipeline.
+# This file defines the SYSTEM PROMPT for the LLM (Groq)
+# used in the RAG (Retrieval-Augmented Generation) pipeline.
 #
-# Purpose:
-#   • Provide instructions to the model
-#   • Define how answers should be structured
-#   • Ensure responses stay grounded in retrieved context
+# ROLE OF THIS FILE:
+# - Control how the LLM behaves
+# - Restrict answers to retrieved knowledge only
+# - Prevent hallucinations
+# - Keep medical answers short, safe, and factual
 #
-# IMPORTANT:
-# The RAG workflow injects the retrieved text into {context}.
-# The model MUST answer using ONLY that information.
+# IMPORTANT ARCHITECTURE NOTE:
+# - The retriever fetches relevant medical text
+# - That text is injected into {context}
+# - The LLM MUST answer using ONLY that context
 # -------------------------------------------------------------
 
 
-# System prompt for the LLM
+# -------------------------------------------------------------
+# SYSTEM PROMPT (LLM BEHAVIOR DEFINITION)
+# -------------------------------------------------------------
+# This prompt is sent as a "system" message to the LLM.
+# System messages have higher priority than user messages.
+#
+# This prompt enforces:
+# - Medical assistant role
+# - Grounded answers (no guessing)
+# - Short and medically correct responses
+# - Honest fallback when information is missing
+
 system_prompt = """
 You are a helpful medical assistant.
-Use the retrieved context to answer clearly and safely.
-If the answer is not found, say "I don't know".
-Answer in short medically-correct sentences.
+
+Rules you must follow:
+- Use ONLY the information provided in the context below.
+- Do NOT add information from outside knowledge.
+- If the answer is not present in the context, say: "I don't know".
+- Answer in short, medically correct sentences.
+- Keep the response clear and safe.
 
 Context:
 {context}
 """
 
-
-# NOTE:
-# The RAG pipeline will format this prompt as:
-#
-#   final_prompt = system_prompt.format(context=retrieved_chunks)
-#
-# Then pass it into the LLM before generating the answer.
-#
-# Example:
-#   answer = llm.invoke(final_prompt)
-#
 # -------------------------------------------------------------
+# END OF FILE
