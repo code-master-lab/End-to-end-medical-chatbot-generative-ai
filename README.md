@@ -123,4 +123,9 @@ project/
 │ └── style.css # UI styling
 │
 └── research/
-└── trials.ipynb # testing notebook (not used in hosting)
+└── trials.ipynb # testing notebook (not used in hosting
+
+
+
+If you want to read this project documentation then click here
+https://code-master-lab.github.io/documentation-file-end-to-end-medical-chatbot/
