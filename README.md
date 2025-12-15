@@ -104,54 +104,56 @@ pip install -r requirements.txt
 ```     
 
 
-
+<pre class="project-structure">
 project/
-│
-├── app.py # Flask backend (production-ready)
-├── requirements.txt # dependencies for hosting
-├── .env # API keys (not pushed to GitHub)
-│
+├── app.py
+├── requirements.txt
+├── .env
 ├── src/
-│ ├── helper.py # embeddings, pinecone loader, RAG pipeline
-│ ├── prompt.py # system prompt for LLM
-│ └── init.py
-│
+│   ├── helper.py
+│   ├── prompt.py
+│   └── __init__.py
 ├── templates/
-│ └── chat.html # frontend UI
-│
+│   └── chat.html
 ├── static/
-│ └── style.css # UI styling
-│
+│   └── style.css
 └── research/
-└── trials.ipynb # testing notebook (not used in hosting
+    └── trials.ipynb
+</pre>
 
-
+<!-- ✅ NOW WE ARE OUTSIDE THE BOX -->
 
 <div class="doc-box">
   <h3>📘 Read Full Project Documentation</h3>
   <p>
-    This repository contains implementation code.
     For a deep engineering-level explanation of architecture,
     failures, fixes, and final RAG design, visit the documentation below.
   </p>
 
-  <a class="doc-button"
-     href="https://code-master-lab.github.io/documentation-file-end-to-end-medical-chatbot/"
-     target="_blank">
+  <a href="https://code-master-lab.github.io/documentation-file-end-to-end-medical-chatbot/"
+     target="_blank" class="doc-button">
      Open Documentation
   </a>
 </div>
-.doc-box {
-  margin-top: 50px;
-  padding: 25px;
-  border-radius: 8px;
-  background: #111827;
+.project-structure {
+  background: #0f172a;
   color: #e5e7eb;
+  padding: 20px;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.doc-box {
+  margin-top: 40px;
+  padding: 25px;
+  background: #111827;
+  border-left: 4px solid #2563eb;
+  border-radius: 8px;
 }
 
 .doc-button {
   display: inline-block;
-  margin-top: 15px;
+  margin-top: 12px;
   padding: 10px 18px;
   background: #2563eb;
   color: white;
@@ -159,4 +161,8 @@ project/
   border-radius: 6px;
   font-weight: 600;
 }
+
+
+
+
 
