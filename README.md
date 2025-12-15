@@ -121,7 +121,7 @@ project/
     └── trials.ipynb
 </pre>
 
-<!-- ✅ NOW WE ARE OUTSIDE THE BOX -->
+<!-- ✅ OUTSIDE THE PRE -->
 
 <div class="doc-box">
   <h3>📘 Read Full Project Documentation</h3>
@@ -132,9 +132,12 @@ project/
 
   <a href="https://code-master-lab.github.io/documentation-file-end-to-end-medical-chatbot/"
      target="_blank" class="doc-button">
-     Open Documentation
+    Open Documentation
   </a>
 </div>
+
+<!-- ✅ CSS MUST BE INSIDE STYLE TAG -->
+<style>
 .project-structure {
   background: #0f172a;
   color: #e5e7eb;
@@ -161,6 +164,7 @@ project/
   border-radius: 6px;
   font-weight: 600;
 }
+</style>
 
 
 
