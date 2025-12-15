@@ -126,22 +126,49 @@ project/
 └── trials.ipynb # testing notebook (not used in hosting
 ```
 
+<hr>
 
-<div class="doc-box">
-  <h3>📘 Read Full Project Documentation</h3>
-  <p>
-    For a deep engineering-level explanation of architecture,
-    failures, fixes, and final RAG design, visit the documentation below.
+<div style="
+  margin-top: 30px;
+  padding: 22px;
+  background-color: #111827;
+  border-left: 4px solid #2563eb;
+  border-radius: 8px;
+  color: #e5e7eb;
+">
+
+  <h3 style="
+    margin-top: 0;
+    color: #93c5fd;
+  ">
+    📘 Read Full Project Documentation
+  </h3>
+
+  <p style="
+    font-size: 14px;
+    line-height: 1.6;
+  ">
+    For a deep engineering-level explanation of architecture, failures,
+    fixes, and final RAG system design, read the complete documentation below.
   </p>
 
-  <a
-    href="https://code-master-lab.github.io/documentation-file-end-to-end-medical-chatbot/"
-    target="_blank"
-    class="doc-button"
-  >
-    Open Documentation
+  <a href="https://code-master-lab.github.io/documentation-file-end-to-end-medical-chatbot/"
+     target="_blank"
+     style="
+       display: inline-block;
+       margin-top: 12px;
+       padding: 10px 18px;
+       background-color: #2563eb;
+       color: #ffffff;
+       text-decoration: none;
+       border-radius: 6px;
+       font-weight: 600;
+     ">
+     Open Documentation
   </a>
+
 </div>
+
 
 
 
