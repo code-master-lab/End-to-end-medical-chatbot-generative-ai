@@ -127,5 +127,36 @@ project/
 
 
 
-If you want to read this project documentation then click here
-https://code-master-lab.github.io/documentation-file-end-to-end-medical-chatbot/
+<div class="doc-box">
+  <h3>📘 Read Full Project Documentation</h3>
+  <p>
+    This repository contains implementation code.
+    For a deep engineering-level explanation of architecture,
+    failures, fixes, and final RAG design, visit the documentation below.
+  </p>
+
+  <a class="doc-button"
+     href="https://code-master-lab.github.io/documentation-file-end-to-end-medical-chatbot/"
+     target="_blank">
+     Open Documentation
+  </a>
+</div>
+.doc-box {
+  margin-top: 50px;
+  padding: 25px;
+  border-radius: 8px;
+  background: #111827;
+  color: #e5e7eb;
+}
+
+.doc-button {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 18px;
+  background: #2563eb;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
