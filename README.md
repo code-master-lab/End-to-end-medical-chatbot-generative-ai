@@ -28,10 +28,11 @@ conda activate medibot
 pip install -r requirements.txt
 
 ```
+
+```
 pip install -e . Very crucial step Add our identity into the environment
 Identity means the folder which gives the name to the project
-
-
+```
 
 
 
