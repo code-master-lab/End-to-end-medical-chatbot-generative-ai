@@ -45,14 +45,14 @@ setup(
     # - Name of the project author
     # - Informational metadata
 
-    author='Bappy Ahmed',
+    author='vivek raut',
 
 
     # author_email:
     # - Contact email of the author
     # - Used in package metadata
 
-    author_email='entbappy73@gmail.com',
+    author_email='rautlata59@gmail.com',
 
 
     # packages:
