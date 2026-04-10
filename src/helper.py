@@ -47,8 +47,8 @@ class HFCustomEmbedder:
             "https://api-inference.huggingface.co/models/"
             "sentence-transformers/all-MiniLM-L6-v2"
         )
-        token = os.getenv("HF_TOKEN")
-        self.headers = {"Authorization": f"Bearer {token}"}
+        token = os.getenv("HF_TOKEN") 
+        self.headers = {"Authorization": f"Bearer {token}"} # Here token used as authentication in also api key To recognise authentication
 
     def embed_query(self, text):
         response = requests.post(
