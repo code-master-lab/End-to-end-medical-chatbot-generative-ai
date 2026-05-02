@@ -1,24 +1,14 @@
 flask
 python-dotenv
-
 langchain
 langchain-community
 langchain-core
 langchain-text-splitters
 langchain-pinecone
 langchain-groq
-
-# change this
-pinecone-client
-
-# to this
-pinecone
-
+pinecone[asyncio]>=6.0.0
 huggingface-hub
-
 requests
-
 pypdf
-
 gunicorn
 
