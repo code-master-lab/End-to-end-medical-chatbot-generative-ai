@@ -18,6 +18,7 @@ from src.helper import get_embeddings   # converts text to vectors
 from src.prompt import system_prompt    # defines chatbot behavior
 
 
+
 # ── LOGGING SETUP ─────────────────────────────────────────────────────────────
 # NEW FEATURE: Logging gives live terminal output while app runs
 # Level INFO → shows INFO, WARNING, ERROR (hides DEBUG noise)
@@ -32,6 +33,10 @@ logger = logging.getLogger(__name__)  # tags logs with filename "app"
 
 logger.info("Imports loaded and logging configured successfully.")
 # ↑ First message you see in terminal — confirms app is booting
+
+
+
+
 # ── ENV KEYS ──────────────────────────────────────────────────────────────────
 # Load .env file once at the top — makes all keys available via os.getenv()
 load_dotenv()
@@ -53,6 +58,8 @@ for key_name, key_val in {
 
 logger.info("All environment keys loaded successfully.")
 # ↑ If you see this in terminal → all 3 keys found, app can proceed safely
+
+
 
 # ── PINECONE VECTOR STORE ─────────────────────────────────────────────────────
 # Connect to existing Pinecone index that holds medical book embeddings
@@ -76,6 +83,8 @@ retriever = vectorstore.as_retriever(search_kwargs={"k": TOP_K_RESULTS})
 logger.info(f"Pinecone retriever ready. Index: {PINECONE_INDEX_NAME}, k={TOP_K_RESULTS}")
 # confirms: Pinecone connected, index name and chunk count visible in terminal
 
+
+
 # ── GROQ LLM ──────────────────────────────────────────────────────────────────
 # Groq runs LLaMA at high speed via API — fast and low-cost inference
 # temperature controls creativity vs precision (0.0 = strict, 1.0 = creative)
@@ -89,6 +98,7 @@ llm = ChatGroq(
     model=MODEL_NAME,        # which LLaMA model Groq should run
     temperature=TEMPERATURE  # how focused vs creative the answers should be
 )
+
 
 
 # ── PROMPT TEMPLATE ───────────────────────────────────────────────────────────
@@ -150,6 +160,9 @@ def rag_pipeline(query: str) -> str:
         # real error visible in terminal — user sees clean message
         return "Sorry, something went wrong. Please try again."
 
+
+
+
 # ── FLASK APP ─────────────────────────────────────────────────────────────────
 # Flask is the web server — it listens for browser requests and sends responses
 # __name__ tells Flask where to find templates and static files
@@ -183,7 +196,6 @@ if __name__ == "__main__":
     app.run(host="0.0.0.0", port=port, debug=False)
     # host="0.0.0.0" → accessible from outside, not just localhost
     # debug=False     → never expose debug console in production
-    
 
 
 
