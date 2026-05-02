@@ -150,24 +150,39 @@ def rag_pipeline(query: str) -> str:
         # real error visible in terminal — user sees clean message
         return "Sorry, something went wrong. Please try again."
 
+# ── FLASK APP ─────────────────────────────────────────────────────────────────
+# Flask is the web server — it listens for browser requests and sends responses
+# __name__ tells Flask where to find templates and static files
 
-
-
-
-# ---------------------- FLASK APP ----------------------
 app = Flask(__name__)
 
+
+# Route 1: serve the chat UI when browser opens the app
 @app.route("/")
 def index():
-    return render_template("chat.html")
+    return render_template("chat.html")  # loads templates/chat.html
 
+
+# Route 2: receive user question and return LLM answer as JSON
+# FIXED: methods=["POST"] only — GET has no body, request.form["msg"] would crash
 @app.route("/get", methods=["POST"])
 def get_bot_response():
-    query = request.form["msg"]
-    answer = rag_pipeline(query)
-    return answer
+    query  = request.form.get("msg", "").strip()
+    # .get("msg", "") → returns "" safely if key missing — no KeyError crash
+    # .strip()        → removes accidental leading/trailing spaces
+    answer = rag_pipeline(query)          # runs full RAG pipeline from Block 5
+    return jsonify({"answer": answer})    # FIXED: proper JSON response for frontend
 
 
+# ── ENTRY POINT ───────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    port = int(os.environ.get("PORT", 8080))
+    # reads PORT from environment — deployment platforms set this automatically
+    # falls back to 8080 for local development if PORT not set
+    logger.info(f"Starting Flask server on port {port}")
+    app.run(host="0.0.0.0", port=port, debug=False)
+    # host="0.0.0.0" → accessible from outside, not just localhost
+    # debug=False     → never expose debug console in production
+
+
+
