@@ -32,13 +32,27 @@ logger = logging.getLogger(__name__)  # tags logs with filename "app"
 
 logger.info("Imports loaded and logging configured successfully.")
 # ↑ First message you see in terminal — confirms app is booting
-
+# ── ENV KEYS ──────────────────────────────────────────────────────────────────
+# Load .env file once at the top — makes all keys available via os.getenv()
 load_dotenv()
 
-# ---------------------- ENV KEYS ----------------------
+# Read all keys upfront — clean and organized in one place
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-HF_TOKEN = os.getenv("HF_TOKEN")
+GROQ_API_KEY     = os.getenv("GROQ_API_KEY")
+HF_TOKEN         = os.getenv("HF_TOKEN")
+
+# NEW: Validate all keys at startup — fail loudly if anything is missing
+# Crashes immediately with a clear message instead of a confusing error later
+for key_name, key_val in {
+    "PINECONE_API_KEY": PINECONE_API_KEY,
+    "GROQ_API_KEY":     GROQ_API_KEY,
+    "HF_TOKEN":         HF_TOKEN
+}.items():
+    if not key_val:
+        raise EnvironmentError(f"Missing required env var: {key_name}")
+
+logger.info("All environment keys loaded successfully.")
+# ↑ If you see this in terminal → all 3 keys found, app can proceed safely
 
 # ---------------------- PINECONE ----------------------
 pc = Pinecone(api_key=PINECONE_API_KEY)
