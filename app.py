@@ -54,18 +54,27 @@ for key_name, key_val in {
 logger.info("All environment keys loaded successfully.")
 # ↑ If you see this in terminal → all 3 keys found, app can proceed safely
 
-# ---------------------- PINECONE ----------------------
-pc = Pinecone(api_key=PINECONE_API_KEY)
-index_name = "medicalbot"
+# ── PINECONE VECTOR STORE ─────────────────────────────────────────────────────
+# Connect to existing Pinecone index that holds medical book embeddings
+# Wrap it as a LangChain retriever to fetch relevant chunks per user query
 
-embeddings = get_embeddings()
+PINECONE_INDEX_NAME = "medicalbot"  # named constant — change index name from one place
+TOP_K_RESULTS       = 3             # NEW: named constant — controls how many chunks retrieved
+
+pc         = Pinecone(api_key=PINECONE_API_KEY)  # open connection to Pinecone cloud
+embeddings = get_embeddings()                     # load HuggingFace embedding model locally
 
 vectorstore = PineconeVectorStore.from_existing_index(
-    index_name=index_name,
-    embedding=embeddings
+    index_name=PINECONE_INDEX_NAME,  # connect to existing index — data already uploaded
+    embedding=embeddings             # same model used during upload — must match
 )
 
-retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+retriever = vectorstore.as_retriever(search_kwargs={"k": TOP_K_RESULTS})
+# as_retriever() → LangChain can now call this automatically in the pipeline
+# k=TOP_K_RESULTS → returns top 3 most relevant medical chunks per query
+
+logger.info(f"Pinecone retriever ready. Index: {PINECONE_INDEX_NAME}, k={TOP_K_RESULTS}")
+# confirms: Pinecone connected, index name and chunk count visible in terminal
 
 # ---------------------- GROQ LLM ----------------------
 llm = ChatGroq(
