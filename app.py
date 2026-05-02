@@ -110,25 +110,48 @@ chain  = prompt | llm | parser
 logger.info(f"LLM chain ready. Model: {MODEL_NAME}, temperature: {TEMPERATURE}")
 # confirms: model name and temperature visible in terminal on every startup
 
-# ---------------------- PROMPT + CHAIN ----------------------
-prompt = ChatPromptTemplate.from_messages([
-    ("system", system_prompt),
-    ("human", "{input}")
-])
-
-parser = StrOutputParser()
-chain = prompt | llm | parser
 
 
-# ---------------------- RAG PIPELINE ----------------------
-def rag_pipeline(query):
-    docs = retriever.invoke(query)
-    context = "\n\n".join([d.page_content for d in docs])
+# ── RAG PIPELINE ──────────────────────────────────────────────────────────────
+# RAG = Retrieval Augmented Generation
+# Flow: user query → retrieve medical chunks → inject as context → LLM answers
+# This function is the core of the entire chatbot
 
-    return chain.invoke({
-        "context": context,
-        "input": query
-    })
+def rag_pipeline(query: str) -> str:
+    """
+    Run the full RAG pipeline for a given user query.
+    Returns the LLM's answer as a plain string.
+    """
+    # Guard: reject empty or whitespace-only queries before any API call
+    if not query or not query.strip():
+        return "Please enter a valid medical question."
+
+    logger.info(f"Query received: {query[:80]}...")
+    # logs first 80 chars — enough to identify query without terminal noise
+
+    try:
+        # Step 1: search Pinecone for top-k relevant medical chunks
+        docs = retriever.invoke(query)
+        logger.info(f"Retrieved {len(docs)} chunks from Pinecone.")
+
+        # Step 2: join all chunk texts into one context string for the LLM
+        context = "\n\n".join([doc.page_content for doc in docs])
+
+        # Step 3: fill prompt slots and send to Groq LLM via chain
+        answer = chain.invoke({
+            "context": context,  # retrieved medical knowledge
+            "input":   query     # user's original question
+        })
+        logger.info("Answer generated successfully.")
+        return answer
+
+    except Exception as e:
+        logger.error(f"RAG pipeline failed: {e}")
+        # real error visible in terminal — user sees clean message
+        return "Sorry, something went wrong. Please try again."
+
+
+
 
 
 # ---------------------- FLASK APP ----------------------
