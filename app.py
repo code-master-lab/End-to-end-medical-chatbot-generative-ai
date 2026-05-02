@@ -180,11 +180,10 @@ def index():
 # FIXED: methods=["POST"] only — GET has no body, request.form["msg"] would crash
 @app.route("/get", methods=["POST"])
 def get_bot_response():
-    query  = request.form.get("msg", "").strip()
-    # .get("msg", "") → returns "" safely if key missing — no KeyError crash
-    # .strip()        → removes accidental leading/trailing spaces
-    answer = rag_pipeline(query)          # runs full RAG pipeline from Block 5
-    return jsonify({"answer": answer})    # FIXED: proper JSON response for frontend
+    query = request.form.get("msg", "").strip()
+    logger.info(f"DEBUG — raw form data: {request.form}")  # ADD THIS LINE
+    answer = rag_pipeline(query)
+    return jsonify({"answer": answer})
 
 
 # ── ENTRY POINT ───────────────────────────────────────────────────────────────
