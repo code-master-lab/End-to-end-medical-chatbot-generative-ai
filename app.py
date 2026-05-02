@@ -76,12 +76,39 @@ retriever = vectorstore.as_retriever(search_kwargs={"k": TOP_K_RESULTS})
 logger.info(f"Pinecone retriever ready. Index: {PINECONE_INDEX_NAME}, k={TOP_K_RESULTS}")
 # confirms: Pinecone connected, index name and chunk count visible in terminal
 
-# ---------------------- GROQ LLM ----------------------
+# ── GROQ LLM ──────────────────────────────────────────────────────────────────
+# Groq runs LLaMA at high speed via API — fast and low-cost inference
+# temperature controls creativity vs precision (0.0 = strict, 1.0 = creative)
+# 0.4 is the sweet spot for medical Q&A — focused but naturally worded
+
+MODEL_NAME  = "llama-3.1-8b-instant"  # named constant — swap model from one place
+TEMPERATURE = 0.4                      # named constant — tune behavior from one place
+
 llm = ChatGroq(
-    api_key=GROQ_API_KEY,
-    model="llama-3.1-8b-instant",
-    temperature=0.4
+    api_key=GROQ_API_KEY,   # validated API key from Block 2
+    model=MODEL_NAME,        # which LLaMA model Groq should run
+    temperature=TEMPERATURE  # how focused vs creative the answers should be
 )
+
+
+# ── PROMPT TEMPLATE ───────────────────────────────────────────────────────────
+# Three explicit slots — no hidden injection, everything visible:
+#   slot 1 → system_prompt  : defines chatbot role and behavior
+#   slot 2 → {context}      : medical chunks retrieved from Pinecone
+#   slot 3 → {input}        : user's actual question
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", system_prompt),                        # role and behavior instructions
+    ("system", "Relevant medical context:\n{context}"), # Pinecone chunks injected here
+    ("human",  "{input}")                             # user's question
+])
+
+parser = StrOutputParser()  # extracts plain text string from LLM response object
+chain  = prompt | llm | parser
+# pipe operator chains: prompt fills slots → llm generates answer → parser returns string
+
+logger.info(f"LLM chain ready. Model: {MODEL_NAME}, temperature: {TEMPERATURE}")
+# confirms: model name and temperature visible in terminal on every startup
 
 # ---------------------- PROMPT + CHAIN ----------------------
 prompt = ChatPromptTemplate.from_messages([
