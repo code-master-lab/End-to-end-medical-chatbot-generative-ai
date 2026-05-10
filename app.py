@@ -156,7 +156,7 @@ def rag_pipeline(query: str) -> str:
         return answer
 
     except Exception as e:
-        logger.error(f"RAG pipeline failed: {e}")
+        logger.exception(f"RAG pipeline failed: {e}")
         # real error visible in terminal — user sees clean message
         return "Sorry, something went wrong. Please try again."
 
