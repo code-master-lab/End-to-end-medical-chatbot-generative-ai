@@ -2,10 +2,10 @@
 
 # Standard Library
 import os                  # access environment variables
-import logging             # NEW: track app activity in terminal
+import logging             # track app activity in terminal
 
 # Third-Party
-from flask import Flask, render_template, request, jsonify  # jsonify is NEW
+from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv          # load API keys from .env file
 from pinecone import Pinecone           # vector database
 from langchain_pinecone import PineconeVectorStore          # search medical docs
@@ -20,7 +20,7 @@ from src.prompt import system_prompt    # defines chatbot behavior
 
 
 # ── LOGGING SETUP ─────────────────────────────────────────────────────────────
-# NEW FEATURE: Logging gives live terminal output while app runs
+# Logging gives live terminal output while app runs
 # Level INFO → shows INFO, WARNING, ERROR (hides DEBUG noise)
 # Format → timestamp | level | message
 
@@ -46,7 +46,7 @@ PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 GROQ_API_KEY     = os.getenv("GROQ_API_KEY")
 HF_TOKEN         = os.getenv("HF_TOKEN")
 
-# NEW: Validate all keys at startup — fail loudly if anything is missing
+# Validate all keys at startup so configuration errors are clear
 # Crashes immediately with a clear message instead of a confusing error later
 for key_name, key_val in {
     "PINECONE_API_KEY": PINECONE_API_KEY,
@@ -66,7 +66,7 @@ logger.info("All environment keys loaded successfully.")
 # Wrap it as a LangChain retriever to fetch relevant chunks per user query
 
 PINECONE_INDEX_NAME = "medicalbot"  # named constant — change index name from one place
-TOP_K_RESULTS       = 3             # NEW: named constant — controls how many chunks retrieved
+TOP_K_RESULTS       = 3             # controls how many chunks are retrieved
 
 pc         = Pinecone(api_key=PINECONE_API_KEY)  # open connection to Pinecone cloud
 embeddings = get_embeddings()                     # load HuggingFace embedding model locally
@@ -165,7 +165,7 @@ def rag_pipeline(query: str) -> str:
 
 # ── FLASK APP ─────────────────────────────────────────────────────────────────
 # Flask is the web server — it listens for browser requests and sends responses
-# __name__ tells Flask where to find templates and static files
+# Flask uses frontend_part for both HTML templates and static assets
 
 app = Flask(__name__, template_folder="frontend_part", static_folder="frontend_part")
 
@@ -177,11 +177,11 @@ def index():
 
 
 # Route 2: receive user question and return LLM answer as JSON
-# FIXED: methods=["POST"] only — GET has no body, request.form["msg"] would crash
+# Use POST because chat messages are submitted in the request body
 @app.route("/get", methods=["POST"])
 def get_bot_response():
     query = request.form.get("msg", "").strip()
-    logger.info(f"DEBUG — raw form data: {request.form}")  # ADD THIS LINE
+    logger.info(f"Chat request received: {query[:80]}...")
     answer = rag_pipeline(query)
     return jsonify({"answer": answer})
 
