@@ -121,10 +121,8 @@ project/
 │ ├── prompt.py # system prompt for LLM
 │ └── init.py
 │
-├── templates/
-│ └── chat.html # frontend UI
-│
-├── static/
+├── frontend_part/
+│ ├── chat.html # frontend UI
 │ └── style.css # UI styling
 │
 └── research/
