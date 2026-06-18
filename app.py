@@ -167,13 +167,13 @@ def rag_pipeline(query: str) -> str:
 # Flask is the web server — it listens for browser requests and sends responses
 # __name__ tells Flask where to find templates and static files
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="frontend_part", static_folder="frontend_part")
 
 
 # Route 1: serve the chat UI when browser opens the app
 @app.route("/")
 def index():
-    return render_template("chat.html")  # loads templates/chat.html
+    return render_template("chat.html")  # loads frontend_part/chat.html
 
 
 # Route 2: receive user question and return LLM answer as JSON
