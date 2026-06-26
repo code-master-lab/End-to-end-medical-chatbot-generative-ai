@@ -32,7 +32,7 @@ setup(
     author="Vivek Raut",
     author_email="rautlata59@gmail.com",
     description=(
-        "End-to-end medical chatbot using Flask, LangChain, Pinecone, "
+        "End-to-end medical chatbot using FastAPI, LangChain, Pinecone, "
         "Groq, and HuggingFace embeddings"
     ),
     long_description=read_readme(),
@@ -49,8 +49,8 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
-        "Framework :: Flask",
+        "Framework :: FastAPI",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
-        "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+        "Topic :: Internet :: WWW/HTTP :: ASGI :: Application",
     ],
 )
