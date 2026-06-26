@@ -1,4 +1,6 @@
-flask
+fastapi
+uvicorn
+python-multipart
 python-dotenv
 langchain
 langchain-community
@@ -11,4 +13,5 @@ huggingface-hub
 requests
 pypdf
 gunicorn
+pageindex
 
