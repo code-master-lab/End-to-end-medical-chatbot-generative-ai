@@ -31,6 +31,25 @@ pip install -e . Very crucial step Add our identity into the environment
 Identity means the folder which gives the name to the project
 ```
 
+### STEP 03- Create a `.env` file
+
+Add these required keys before starting the app:
+
+```bash
+PINECONE_API_KEY=your_pinecone_api_key
+GROQ_API_KEY=your_groq_api_key
+HF_TOKEN=your_huggingface_token
+```
+
+### STEP 04- Run the FastAPI app
+
+```bash
+uvicorn app:app --host 0.0.0.0 --port 8080 --reload
+```
+
+Open the app at `http://localhost:8080/`.
+FastAPI docs are available at `http://localhost:8080/docs`.
+
 
 
                   ┌───────────────────────────────┐
@@ -109,7 +128,7 @@ Identity means the folder which gives the name to the project
 
 project/
 │
-├── app.py # Flask backend (production-ready)
+├── app.py # FastAPI backend (production-ready)
 ├── requirements.txt # dependencies for hosting
 ├── .env # API keys (not pushed to GitHub)
 │
