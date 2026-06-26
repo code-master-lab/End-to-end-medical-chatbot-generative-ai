@@ -1,17 +1,21 @@
 # ── IMPORTS ───────────────────────────────────────────────────────────────────
 
 # Standard Library
-import os                  # access environment variables
 import logging             # track app activity in terminal
+import os                  # access environment variables
 
 # Third-Party
-from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv          # load API keys from .env file
-from pinecone import Pinecone           # vector database
-from langchain_pinecone import PineconeVectorStore          # search medical docs
-from langchain_groq import ChatGroq                         # LLM for generating answers
-from langchain_core.prompts import ChatPromptTemplate       # structure the prompt
+from fastapi import FastAPI, Form, Request
+from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from langchain_core.output_parsers import StrOutputParser   # parse LLM output to string
+from langchain_core.prompts import ChatPromptTemplate       # structure the prompt
+from langchain_groq import ChatGroq                         # LLM for generating answers
+from langchain_pinecone import PineconeVectorStore          # search medical docs
+from pinecone import Pinecone           # vector database
+import uvicorn
 
 # Local
 from src.helper import get_embeddings   # converts text to vectors
@@ -163,27 +167,28 @@ def rag_pipeline(query: str) -> str:
 
 
 
-# ── FLASK APP ─────────────────────────────────────────────────────────────────
-# Flask is the web server — it listens for browser requests and sends responses
-# Flask uses frontend_part for both HTML templates and static assets
+# ── FASTAPI APP ───────────────────────────────────────────────────────────────
+# FastAPI is the web server. It serves frontend_part as templates and static assets.
 
-app = Flask(__name__, template_folder="frontend_part", static_folder="frontend_part")
+app = FastAPI(title="MediBot AI")
+app.mount("/static", StaticFiles(directory="frontend_part"), name="static")
+templates = Jinja2Templates(directory="frontend_part")
 
 
 # Route 1: serve the chat UI when browser opens the app
-@app.route("/")
-def index():
-    return render_template("chat.html")  # loads frontend_part/chat.html
+@app.get("/", response_class=HTMLResponse)
+def index(request: Request):
+    return templates.TemplateResponse("chat.html", {"request": request})
 
 
 # Route 2: receive user question and return LLM answer as JSON
 # Use POST because chat messages are submitted in the request body
-@app.route("/get", methods=["POST"])
-def get_bot_response():
-    query = request.form.get("msg", "").strip()
+@app.post("/get")
+def get_bot_response(msg: str = Form(default="")):
+    query = msg.strip()
     logger.info(f"Chat request received: {query[:80]}...")
     answer = rag_pipeline(query)
-    return jsonify({"answer": answer})
+    return JSONResponse(content={"answer": answer})
 
 
 # ── ENTRY POINT ───────────────────────────────────────────────────────────────
@@ -191,10 +196,9 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     # reads PORT from environment — deployment platforms set this automatically
     # falls back to 8080 for local development if PORT not set
-    logger.info(f"Starting Flask server on port {port}")
-    app.run(host="0.0.0.0", port=port, debug=False)
+    logger.info(f"Starting FastAPI server on port {port}")
+    uvicorn.run(app, host="0.0.0.0", port=port)
     # host="0.0.0.0" → accessible from outside, not just localhost
-    # debug=False     → never expose debug console in production
 
 
 
