@@ -13,5 +13,5 @@ huggingface-hub
 requests
 pypdf
 gunicorn
-pageindex
+pageindex==0.2.8
 
