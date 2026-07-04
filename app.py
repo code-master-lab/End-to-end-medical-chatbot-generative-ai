@@ -178,7 +178,11 @@ templates = Jinja2Templates(directory="frontend_part")
 # Route 1: serve the chat UI when browser opens the app
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
-    return templates.TemplateResponse("chat.html", {"request": request})
+    return templates.TemplateResponse(
+        request=request,
+        name="chat.html",
+        context={}
+    )
 
 
 # Route 2: receive user question and return LLM answer as JSON
@@ -194,11 +198,13 @@ def get_bot_response(msg: str = Form(default="")):
 # ── ENTRY POINT ───────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
+    host = os.environ.get("HOST", "127.0.0.1")
     # reads PORT from environment — deployment platforms set this automatically
     # falls back to 8080 for local development if PORT not set
-    logger.info(f"Starting FastAPI server on port {port}")
-    uvicorn.run(app, host="0.0.0.0", port=port)
-    # host="0.0.0.0" → accessible from outside, not just localhost
+    # HOST defaults to 127.0.0.1 so the printed URL is directly openable locally
+    # set HOST=0.0.0.0 when deploying or exposing the server to other machines
+    logger.info(f"Starting FastAPI server at http://{host}:{port}")
+    uvicorn.run(app, host=host, port=port)
 
 
 
