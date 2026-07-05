@@ -7,7 +7,7 @@ import os                  # access environment variables
 # Third-Party
 from dotenv import load_dotenv          # load API keys from .env file
 from fastapi import FastAPI, Form, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from langchain_core.output_parsers import StrOutputParser   # parse LLM output to string
@@ -183,6 +183,11 @@ def index(request: Request):
         name="chat.html",
         context={}
     )
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    return RedirectResponse(url="/static/favicon.svg")
 
 
 # Route 2: receive user question and return LLM answer as JSON
