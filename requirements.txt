@@ -12,5 +12,4 @@ pinecone[asyncio]>=6.0.0
 huggingface-hub
 requests
 pypdf
-gunicorn
 pageindex==0.2.8

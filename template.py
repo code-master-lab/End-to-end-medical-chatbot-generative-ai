@@ -15,9 +15,9 @@ list_of_files = [
     "frontend_part/chat.html",
     "frontend_part/style.css",
     "data/.gitkeep",
-    "data2/.gitkeep",
+    "Data2/.gitkeep",
     "research/trials.ipynb",
-    "research/ingest_3rd_edition.ipynb",
+    "research/Page_indexing.ipynb",
 ]
  
  

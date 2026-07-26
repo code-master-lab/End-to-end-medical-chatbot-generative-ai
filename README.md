@@ -131,12 +131,17 @@ project/
 │
 ├── app.py # FastAPI backend (production-ready)
 ├── requirements.txt # dependencies for hosting
+├── render.yaml # Render deployment configuration
 ├── .env # API keys (not pushed to GitHub)
 │
 ├── src/
-│ ├── helper.py # embeddings, pinecone loader, RAG pipeline
+│ ├── helper.py # embeddings, Pinecone and PageIndex retrieval helpers
 │ ├── prompt.py # system prompt for LLM
 │ └── init.py
+│
+├── Data2/
+│ ├── medical_doc_id.json
+│ └── medical_tree.json
 │
 ├── frontend_part/
 │ ├── chat.html # frontend UI
@@ -145,6 +150,10 @@ project/
 └── research/
 └── trials.ipynb # testing notebook (not used in hosting)
 ```
+
+### Chat modes
+
+MediBot supports three retrieval modes: **fast** uses Pinecone similarity search, **precise** uses PageIndex document retrieval, and **hybrid** combines both. `src/helper.py` contains the retrieval logic for Pinecone and PageIndex. The repository uses the capitalized `Data2/` folder name, which must stay consistent for Linux/Render deployments.
 
 <hr>
 
@@ -188,7 +197,6 @@ project/
   </a>
 
 </div>
-
 
 
 

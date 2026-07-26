@@ -119,6 +119,11 @@ def favicon():
     return RedirectResponse(url="/static/favicon.svg")
 
 
+@app.get("/health", include_in_schema=False)
+def health():
+    return {"status": "ok"}
+
+
 @app.post("/get")
 async def get_bot_response(msg: str = Form(default=""), mode: str = Form(default="fast")):
     query = msg.strip()
