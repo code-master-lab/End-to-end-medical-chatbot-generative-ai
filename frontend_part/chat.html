@@ -44,13 +44,42 @@
       </div>
     </div>
 
-    <div class="row bot typing-row" id="typingRow">
-      <div class="av">🤖</div>
+  <div class="row bot typing-row" id="typingRow">
+    <div class="av">🤖</div>
       <div class="dots"><span></span><span></span><span></span></div>
     </div>
   </div>
 
+  <!-- Shows which mode (if any) is currently active. Hidden until one is picked. -->
+  <div class="active-mode" id="activeModeBar">
+    <span class="active-mode-label" id="activeModeLabel"></span>
+    <button class="clear-mode" id="clearMode" type="button" aria-label="Turn off mode">✕</button>
+  </div>
+
   <div class="input-area">
+
+    <div class="menu-wrap">
+      <button class="plus-btn" id="plusBtn" type="button"
+              aria-haspopup="true" aria-expanded="false" aria-label="More options">+</button>
+
+      <div class="mode-menu" id="modeMenu" role="menu">
+        <button class="mode-row" data-mode="precise" type="button" role="menuitem">
+          <span class="mode-icon icon-precise">🧠</span>
+          <span class="mode-text">
+            <span class="mode-title">Deep Research</span>
+            <span class="mode-sub">Logical reasoning · 20–40s</span>
+          </span>
+        </button>
+        <button class="mode-row" data-mode="hybrid" type="button" role="menuitem">
+          <span class="mode-icon icon-hybrid">⚡</span>
+          <span class="mode-text">
+            <span class="mode-title">Fast + Logic</span>
+            <span class="mode-sub">Pinecone + PageIndex answer</span>
+          </span>
+        </button>
+      </div>
+    </div>
+
     <div class="pill">
       <input id="inp" type="text" placeholder="Ask about symptoms, medications, health tips..." autocomplete="off"/>
     </div>
@@ -80,7 +109,7 @@
     showTyping();
 
     $.ajax({
-      data: { msg: text },
+      data: { msg: text, mode: activeMode || 'fast' },
       type: 'POST',
       url: '/get'
     }).done(function(data) {
@@ -117,6 +146,7 @@
   function newChat() {
     chat.querySelectorAll('.row:not(.typing-row)').forEach(r => r.remove());
     addMsg('bot', 'Hello again! 👋 Fresh start. How can I help you?');
+    selectMode(null);
   }
 
   function escHtml(t) {
@@ -131,6 +161,66 @@
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
       .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
       .replace(/\n/g,'<br>');
+  }
+
+  /* ── + MENU: Deep Research / Fast + Logic ─────────────────────────── */
+
+  const plusBtn        = document.getElementById('plusBtn');
+  const modeMenu        = document.getElementById('modeMenu');
+  const activeModeBar   = document.getElementById('activeModeBar');
+  const activeModeLabel = document.getElementById('activeModeLabel');
+  const clearModeBtn    = document.getElementById('clearMode');
+
+  let activeMode = null; // null (default/fast) | 'precise' | 'hybrid'
+
+  const MODES = {
+    precise: { icon: '🧠', label: 'Deep Research', css: 'mode-precise' },
+    hybrid:  { icon: '⚡', label: 'Fast + Logic',  css: 'mode-hybrid'  }
+  };
+
+  function openMenu()  { modeMenu.classList.add('open');  plusBtn.classList.add('open');  plusBtn.setAttribute('aria-expanded', 'true'); }
+  function closeMenu() { modeMenu.classList.remove('open'); plusBtn.classList.remove('open'); plusBtn.setAttribute('aria-expanded', 'false'); }
+
+  plusBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    modeMenu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!modeMenu.contains(e.target) && e.target !== plusBtn) closeMenu();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  document.querySelectorAll('.mode-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const mode = row.dataset.mode;
+      selectMode(activeMode === mode ? null : mode); // clicking the active one again turns it off
+      closeMenu();
+    });
+  });
+
+  clearModeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    selectMode(null);
+  });
+
+  function selectMode(mode) {
+    activeMode = mode;
+
+    document.querySelectorAll('.mode-row').forEach(r => {
+      r.classList.toggle('selected', r.dataset.mode === mode);
+    });
+
+    if (mode) {
+      const m = MODES[mode];
+      activeModeBar.className = 'active-mode show ' + m.css;
+      activeModeLabel.textContent = m.icon + '  ' + m.label;
+    } else {
+      activeModeBar.className = 'active-mode';
+    }
   }
 </script>
 </body>

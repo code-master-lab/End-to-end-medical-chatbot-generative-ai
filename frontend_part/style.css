@@ -14,6 +14,8 @@
   --warn-bg:      #fffbeb;
   --warn-text:    #92400e;
   --warn-border:  #fde68a;
+  --indigo:       #6366f1;
+  --indigo-bg:    #eef0ff;
   --font:         'Plus Jakarta Sans', sans-serif;
 }
 
@@ -237,6 +239,116 @@ body {
   flex-shrink: 0;
 }
 
+/* ── + MENU: Deep Research / Fast + Logic ──────────────────────────── */
+
+.menu-wrap { position: relative; flex-shrink: 0; }
+
+.plus-btn {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  color: var(--primary);
+  font-size: 20px;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .2s, background .2s, transform .25s ease;
+}
+.plus-btn:hover { border-color: var(--primary); background: var(--input-bg); }
+.plus-btn.open  { transform: rotate(45deg); border-color: var(--primary); background: var(--input-bg); }
+.plus-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+.mode-menu {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  width: 260px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(26,110,245,0.16);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  opacity: 0;
+  transform: translateY(6px) scale(.98);
+  pointer-events: none;
+  transition: opacity .16s ease, transform .16s ease;
+  z-index: 30;
+}
+.mode-menu.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+.mode-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  width: 100%;
+  padding: 9px 10px;
+  background: none;
+  border: none;
+  border-radius: 11px;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font);
+  transition: background .15s;
+}
+.mode-row:hover { background: var(--input-bg); }
+.mode-row:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
+.mode-row.selected { background: var(--primary) ; background: #eef4ff; }
+
+.mode-icon {
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.icon-precise { background: var(--indigo-bg); }
+.icon-hybrid  { background: #eef4ff; }
+
+.mode-text { display: flex; flex-direction: column; gap: 1px; padding-top: 1px; }
+.mode-title { font-size: 13.5px; font-weight: 700; color: var(--text); }
+.mode-sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+
+.active-mode {
+  max-height: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: #eef4ff;
+  border-top: 1px solid transparent;
+  transition: max-height .2s ease, padding .2s ease, border-color .2s ease;
+  flex-shrink: 0;
+}
+.active-mode.show { max-height: 40px; padding: 8px 16px; border-top: 1px solid var(--border); }
+.active-mode.mode-precise { background: var(--indigo-bg); }
+.active-mode.mode-hybrid  { background: #eef4ff; }
+
+.active-mode-label { font-size: 12.5px; font-weight: 700; color: var(--primary); }
+.active-mode.mode-precise .active-mode-label { color: var(--indigo); }
+
+.clear-mode {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.7);
+  color: var(--muted);
+  font-size: 11px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, color .15s;
+}
+.clear-mode:hover { background: #fff; color: var(--text); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mode-menu, .plus-btn, .active-mode { transition: none; }
+}
+
 @media (max-width: 600px) {
   body { padding: 0; align-items: stretch; justify-content: flex-start; }
   .card { height: 100dvh; max-height: none; border-radius: 0; border: none; box-shadow: none; }
@@ -248,6 +360,10 @@ body {
   .input-area { padding: 8px 10px; }
   #inp { font-size: 14px; }
   .send { width: 40px; height: 40px; }
+  .plus-btn { width: 40px; height: 40px; font-size: 18px; }
+  .mode-menu { width: 230px; }
+  .mode-title { font-size: 13px; }
+  .mode-sub   { font-size: 11px; }
 }
 
 @media (max-width: 380px) {
