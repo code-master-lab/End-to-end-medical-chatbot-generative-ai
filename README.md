@@ -39,6 +39,7 @@ Add these required keys before starting the app:
 PINECONE_API_KEY=your_pinecone_api_key
 GROQ_API_KEY=your_groq_api_key
 HF_TOKEN=your_huggingface_token
+PAGEINDEX_API_KEY=your_pageindex_api_key
 ```
 
 ### STEP 04- Run the FastAPI app
@@ -187,7 +188,6 @@ project/
   </a>
 
 </div>
-
 
 
 
