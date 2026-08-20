@@ -78,7 +78,7 @@ logger.info("All environment keys loaded successfully.")
 PINECONE_INDEX_NAME = "medicalbot"
 TOP_K_RESULTS       = 3   # how many chunks Pinecone returns per question
 
-pc         = Pinecone(api_key=PINECONE_API_KEY)
+pc_client         = Pinecone(api_key=PINECONE_API_KEY)
 embeddings = get_embeddings()
 
 vectorstore = PineconeVectorStore.from_existing_index(
@@ -104,8 +104,8 @@ logger.info("PageIndex client ready.")
 # The model that actually writes the final answer, regardless of which mode
 # supplied the context.
 
-MODEL_NAME  = "llama-3.1-8b-instant"
-TEMPERATURE = 0.4   # 0 = strict/focused, 1 = creative — 0.4 favors accuracy over flair
+MODEL_NAME  = "openai/gpt-oss-120b"
+TEMPERATURE = 0.3  # Optional: lower for medical accuracy
 
 llm = ChatGroq(
     api_key=GROQ_API_KEY,
