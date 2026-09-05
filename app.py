@@ -7,6 +7,7 @@ import os                     # reads values from the .env file
 
 # Third-Party
 from dotenv import load_dotenv          # loads .env into the environment
+load_dotenv()                           # must run before importing src.helper
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -47,8 +48,6 @@ logger.info("Imports loaded and logging configured successfully.")
 # ── ENV KEYS ──────────────────────────────────────────────────────────────────
 # Loaded once, validated once, at startup — so a missing key fails immediately
 # with a clear message instead of crashing confusingly mid-chat later.
-
-load_dotenv()
 
 PINECONE_API_KEY  = os.getenv("PINECONE_API_KEY")
 GROQ_API_KEY      = os.getenv("GROQ_API_KEY")
